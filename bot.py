@@ -67,7 +67,13 @@ async def handle_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
     save_files(files)
     link = f"https://t.me/{BOT_USERNAME}?start={code}"
     await msg.reply_text(f"Ho gaya! ✅\nTumhari file ka link:\n{link}")
-async def main():
-    threading.Thread(target=run_flask...
-    ...
-    asyncio.run(main())
+def main():
+    threading.Thread(target=run_flask, daemon=True).start()
+    app_bot = ApplicationBuilder().token(TOKEN).build()
+    app_bot.add_handler(CommandHandler("start", start))
+    app_bot.add_handler(MessageHandler(filters.ALL, handle_file))
+    print("Bot start ho gaya!")
+    app_bot.run_polling()
+
+if __name__ == "__main__":
+    main()
